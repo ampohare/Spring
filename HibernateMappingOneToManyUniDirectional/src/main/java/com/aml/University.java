@@ -6,14 +6,21 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
-@Table(name="university1")
+@Table(name="university121")
 public class University {
 	Long univesityId;
 	String universityName;
@@ -27,7 +34,7 @@ public class University {
 		super();
 	}
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="uni_id")
 	public Long getUnivesityId() {
 		return univesityId;
@@ -42,9 +49,15 @@ public class University {
 	public void setUniversityName(String universityName) {
 		this.universityName = universityName;
 	}
-	@OneToMany(cascade=CascadeType.ALL)
-	@GeneratedValue
-	@JoinTable(joinColumns= {@JoinColumn(name="uni_id")},inverseJoinColumns= {@JoinColumn(name="stud_id")})
+	@OneToMany(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	
+	/*@OneToMany
+	 @Cascade({org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
+    org.hibernate.annotations.CascadeType.PERSIST})*/
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@JoinTable(name="stun",joinColumns= {@JoinColumn(name="stud_id")},inverseJoinColumns= {@JoinColumn(name="uni_id")})
+	
+	//@JoinColumn
 	public Set<Student> getSd() {
 		return Sd;
 	}
